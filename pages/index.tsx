@@ -7,11 +7,17 @@ import { Icons } from "@/components/icons"
 
 import { useState } from 'react';
 
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+let OPENAI_API_KEY;
+let openai;
+if (process.browser) {
+   // on browser
+  const { Configuration, OpenAIApi } = require("openai");
+  OPENAI_API_KEY = getParameterByName('openai_api_key') || process.env.NEXT_PUBLIC_OPENAI_API_KEY
+  const configuration = new Configuration({
+    apiKey: OPENAI_API_KEY,
+  });
+  openai = new OpenAIApi(configuration);
+}
 // const Cosmic = require("cosmicjs")
 // const api = Cosmic({
 //   apiEnvironment: 'staging'
@@ -76,6 +82,66 @@ export default function IndexPage() {
   // if (error) {
   //   alert(error)
   // }
+
+  // async function handleAddToCosmic(e) {
+  //   setAddToCosmic(true);
+  // }
+
+  async function resetForm(e) {
+    setStatus('');
+    setPrompt('');
+    setError(false);
+    setErrorMessage('');
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus('submitting');
+    try {
+      await submitForm(prompt);
+      setStatus('success');
+    } catch (err) {
+      setStatus('typing');
+      setError(err);
+    }
+  }
+
+  async function handleKeyDown(e) {
+    if (e.metaKey && e.keyCode === 13) {
+      setStatus('submitting');
+      try {
+        await submitForm(prompt);
+        setStatus('success');
+      } catch (err) {
+        setStatus('typing');
+        setError(err);
+      }
+    }
+  }
+
+  function handleTextareaChange(e) {
+    setPrompt(e.target.value);
+  }
+  
+  async function submitForm(q) {
+    try {
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: q,
+        temperature: 0.5,
+        max_tokens: 500,
+        top_p: 1.0,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+      });
+      setAnswer(response.data.choices[0].text)
+    } catch(err) {
+      setError(true)  
+      console.log('err', err)
+      setErrorMessage(err)
+    }
+  }
+
   function handleCopyClick() {
     console.log(answer)
     navigator.clipboard.writeText(answer);
@@ -91,6 +157,7 @@ export default function IndexPage() {
         placeholder="Ask Cosmic Writing Assistant anything. It can be something short like: Translate 'Hello' into French, German, and Italian. Or something long like: Write an article that will rank in search results for '10 best ramen restaurants in the San Francisco bay area'."
         value={prompt}
         onChange={handleTextareaChange}
+        onKeyDown={handleKeyDown}
         disabled={status === 'submitting'}
         className="h-20 w-full"
         autoFocus
@@ -138,52 +205,6 @@ export default function IndexPage() {
     </div>
   }
 
-
-  async function handleAddToCosmic(e) {
-    setAddToCosmic(true);
-  }
-
-  async function resetForm(e) {
-    setStatus('');
-    setPrompt('');
-    setError(false);
-    setErrorMessage('');
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setStatus('submitting');
-    try {
-      await submitForm(prompt);
-      setStatus('success');
-    } catch (err) {
-      setStatus('typing');
-      setError(err);
-    }
-  }
-
-  function handleTextareaChange(e) {
-    setPrompt(e.target.value);
-  }
-  
-  async function submitForm(q) {
-    try {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: q,
-        temperature: 0.5,
-        max_tokens: 500,
-        top_p: 1.0,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.0,
-      });
-      setAnswer(response.data.choices[0].text)
-    } catch(err) {
-      setError(true)  
-      console.log('err', err)
-      setErrorMessage(err)
-    }
-  }
   return (
     <Layout>
       <Head>
