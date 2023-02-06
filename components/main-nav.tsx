@@ -12,10 +12,16 @@ interface MainNavProps {
 export function MainNav({ items }: MainNavProps) {
   return (
     <div>
-      <Icons.logo className="mr-2 inline-block h-6 w-6" />
-      <span className="inline-block font-bold">
-        {siteConfig.name}
-      </span>
+      <Link
+        href="https://www.cosmicjs.com"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Icons.logo className="mr-2 inline-block h-6 w-6" />
+        <span className="inline-block font-bold">
+          {siteConfig.name}
+        </span>
+      </Link>
     </div>
   )
 }
