@@ -76,6 +76,7 @@ export default function IndexPage() {
   //   alert(error)
   // }
   function handleCopyClick() {
+    console.log(answer)
     navigator.clipboard.writeText(answer);
     setCopied(true)
     setTimeout(() => {
