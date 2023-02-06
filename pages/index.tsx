@@ -56,11 +56,12 @@ function str2br(str) {
 export default function IndexPage() {
   const [prompt, setPrompt] = useState('');
   const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [status, setStatus] = useState('typing');
   const [copied, setCopied] = useState(false);
   const [answer, setAnswer] = useState('');
   const [addToCosmic, setAddToCosmic] = useState(false);
-
+  
   // if (addToCosmic) {
   //   sendAnswerToCosmic(answer)
   //   setAddToCosmic(false);
@@ -128,6 +129,15 @@ export default function IndexPage() {
     </div>
   }
 
+  if (error && errorMessage) {
+    content = <div>
+      <div className="mb-3">
+        An error occured.
+      </div>
+      <Button onClick={resetForm}>Try again</Button>
+    </div>
+  }
+
 
   async function handleAddToCosmic(e) {
     setAddToCosmic(true);
@@ -136,6 +146,8 @@ export default function IndexPage() {
   async function resetForm(e) {
     setStatus('');
     setPrompt('');
+    setError(false);
+    setErrorMessage('');
   }
 
   async function handleSubmit(e) {
@@ -155,17 +167,22 @@ export default function IndexPage() {
   }
   
   async function submitForm(q) {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: q,
-      temperature: 0.5,
-      max_tokens: 500,
-      top_p: 1.0,
-      frequency_penalty: 0.0,
-      presence_penalty: 0.0,
-    });
-    console.log(response.data.choices[0].text)
-    setAnswer(response.data.choices[0].text)
+    try {
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: q,
+        temperature: 0.5,
+        max_tokens: 500,
+        top_p: 1.0,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+      });
+      setAnswer(response.data.choices[0].text)
+    } catch(err) {
+      setError(true)  
+      console.log('err', err)
+      setErrorMessage(err)
+    }
   }
   return (
     <Layout>
