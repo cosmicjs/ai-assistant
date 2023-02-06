@@ -114,12 +114,8 @@ export default function IndexPage() {
           Answer
         </h2>
         <div className="absolute top-0 right-0">
-          { !copied &&
-            <Button onClick={handleCopyClick}>Copy <Icons.copy className="ml-2 h-5 w-5" /></Button>
-          }
-          { copied &&
-            <Button onClick={handleCopyClick}>Copied <Icons.copied className="ml-2 h-5 w-5" /></Button>
-          }
+            <Button onClick={handleCopyClick}>{ copied ? 'Copied' : 'Copy' } 
+            { copied ? <Icons.copied className="ml-2 h-5 w-5" /> : <Icons.copy className="ml-2 h-5 w-5" /> }</Button>
         </div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: str2br(answer)}} className="mb-5"></div>
