@@ -1,9 +1,6 @@
-import { NavItem } from "@/types/nav"
-
 interface SiteConfig {
   name: string
   description: string
-  mainNav: NavItem[]
   links: {
     twitter: string
     github: string
@@ -12,18 +9,12 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Next.js",
+  name: "Cosmic AI Writing Assistant",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
-  mainNav: [
-    {
-      title: "Home",
-      href: "/",
-    },
-  ],
+    "An AI writing assistant",
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    twitter: "https://twitter.com/cosmicjs",
+    github: "https://github.com/cosmicjs",
+    docs: "https://docs.cosmicjs.com",
   },
 }
