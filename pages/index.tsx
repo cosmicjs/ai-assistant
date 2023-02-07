@@ -45,6 +45,7 @@ export default function IndexPage() {
   const [status, setStatus] = useState('typing');
   const [copied, setCopied] = useState(false);
   const [answer, setAnswer] = useState('');
+  const [addingToCosmic, setAddingToCosmic] = useState(false);
   
   /* Prompts
   Headless CMS
@@ -58,6 +59,7 @@ export default function IndexPage() {
   // }
 
   async function handleAddToCosmic(e) {
+    setAddingToCosmic(true)
     const bucket = api.bucket({
       slug: getParameterByName('bucket_slug') || process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG,
       read_key: getParameterByName('read_key') || process.env.NEXT_PUBLIC_COSMIC_BUCKET_READ_KEY,
@@ -72,8 +74,10 @@ export default function IndexPage() {
     try {
       const added = await bucket.objects.insertOne(post)
       console.log('Added!', added)
+      setAddingToCosmic(false)
     } catch (err) {
       console.log(err)
+      setAddingToCosmic(false)
     }
   }
 
@@ -179,7 +183,9 @@ export default function IndexPage() {
           { copied ? <Icons.copied className="ml-2 h-5 w-5" /> : <Icons.copy className="ml-2 h-5 w-5" /> }
         </Button>
         &nbsp;&nbsp;&nbsp;
-        <Button onClick={handleAddToCosmic}>Add to this Object to Cosmic</Button>
+        <Button onClick={handleAddToCosmic} disabled={addingToCosmic}>
+          { addingToCosmic ? `Adding to Cosmic...` : `Add to this Object to Cosmic` }
+        </Button>
         &nbsp;&nbsp;&nbsp;
         <Button onClick={resetForm}>Ask another question</Button>
       </div>
