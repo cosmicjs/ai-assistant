@@ -3,7 +3,7 @@
 A Chat-GPT powered writing assistant. Ask Writing Assistant anything, save it to your Cosmic project. Simple.
 
 ## How to use
-1. Go to https://beta.cosmic-staging.com sign up / login.
+1. Go to https://beta.cosmicjs.com sign up / login.
 2. Go to new or existing project. Go to Bucket Settings > Extensions.
 3. Click the + to add a new Extension.
 4. Set the emoji, title, and this extension URL `https://cosmic-writing-assistant.vercel.app` Save.

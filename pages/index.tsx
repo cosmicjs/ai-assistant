@@ -19,9 +19,7 @@ if (process.browser) {
   openai = new OpenAIApi(configuration);
 }
 const Cosmic = require("cosmicjs")
-const api = Cosmic({
-  apiEnvironment: 'staging'
-})
+const api = Cosmic()
 
 function getParameterByName(name, url = '') {
   if (!url) url = window.location.href;
