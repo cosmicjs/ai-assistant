@@ -1,78 +1,25 @@
-# next-template
+# Cosmic Writing Assistant Extension
 
-A Next.js 13 template for building apps with Radix UI and Tailwind CSS.
+A Chat-GPT powered writing assistant. Ask Writing Assistant anything, save it to your Cosmic project. Simple.
+
+## How to use
+1. Go to https://beta.cosmicjs.com sign up / login.
+2. Go to new or existing project. Go to Bucket Settings > Extensions.
+3. Click the + to add a new Extension.
+4. Set the emoji, title, and this extension URL `https://cosmic-writing-assistant.vercel.app` Save.
+5. Click additional details, and add a Query Parameter `type` set to `posts` or whatever Content Type you would like to save your prompts and answers. Save.
+6. Then go to the extension page and ask ChatGPT anything and save it to your Project!
 
 ## Features
-
+- ChatGPT prompt
+- Save your prompts and answers to Cosmic
+- Next.js 13
 - Radix UI Primitives
 - Tailwind CSS
 - Fonts with `@next/font`
 - Icons from [Lucide](https://lucide.dev)
 - Dark mode with `next-themes`
-- Automatic import sorting with `@ianvs/prettier-plugin-sort-imports`
-
-## Tailwind CSS Features
-
-- Class merging with `taiwind-merge`
-- Animation with `tailwindcss-animate`
-- Conditional classes with `clsx`
-- Variants with `class-variance-authority`
-- Automatic class sorting with `eslint-plugin-tailwindcss`
-
-## Import Sort
-
-The starter comes with `@ianvs/prettier-plugin-sort-imports` for automatically sort your imports.
-
-### Input
-
-```tsx
-import * as React from "react"
-import Link from "next/link"
-
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
-import "@/styles/globals.css"
-import { twMerge } from "tailwind-merge"
-
-import { NavItem } from "@/types/nav"
-import { cn } from "@/lib/utils"
-```
-
-### Output
-
-```tsx
-import * as React from "react"
-// React is always first.
-import Link from "next/link"
-// Followed by next modules.
-import { twMerge } from "tailwind-merge"
-
-// Followed by third-party modules
-// Space
-import "@/styles/globals.css"
-// styles
-import { NavItem } from "@/types/nav"
-// types
-import { siteConfig } from "@/config/site"
-// config
-import { cn } from "@/lib/utils"
-// lib
-import { buttonVariants } from "@/components/ui/button"
-
-// components
-```
-
-### Class Merging
-
-The `cn` util handles conditional classes and class merging.
-
-### Input
-
-```ts
-cn("px-2 bg-slate-100 py-2 bg-slate-200")
-// Outputs `p-2 bg-slate-200`
-```
 
 ## License
 
-Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
+Licensed under the [MIT license](/LICENSE.md).
