@@ -18,10 +18,10 @@ if (process.browser) {
   });
   openai = new OpenAIApi(configuration);
 }
-// const Cosmic = require("cosmicjs")
-// const api = Cosmic({
-//   apiEnvironment: 'staging'
-// })
+const Cosmic = require("cosmicjs")
+const api = Cosmic({
+  apiEnvironment: 'staging'
+})
 
 function getParameterByName(name, url = '') {
   if (!url) url = window.location.href;
@@ -37,27 +37,6 @@ function str2br(str) {
   return str.trim().replace(/(?:\r\n|\r|\n)/g, '<br>')
 }
 
-// const sendAnswerToCosmic = async (answer) => {
-//   const bucket = api.bucket({
-//     slug: getParameterByName('bucket_slug'),
-//     read_key: getParameterByName('read_key'),
-//     write_key: getParameterByName('write_key')
-//   })
-//   console.log('sending')
-//   try {
-//     const edit = await bucket.objects.updateOne({
-//       id: getParameterByName('object_id')
-//     }, {
-//       $set: {
-//         content: str2br(answer)
-//       }
-//     })
-//     console.log('Update!', edit)
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
 
 export default function IndexPage() {
   const [prompt, setPrompt] = useState('');
@@ -66,12 +45,7 @@ export default function IndexPage() {
   const [status, setStatus] = useState('typing');
   const [copied, setCopied] = useState(false);
   const [answer, setAnswer] = useState('');
-  const [addToCosmic, setAddToCosmic] = useState(false);
   
-  // if (addToCosmic) {
-  //   sendAnswerToCosmic(answer)
-  //   setAddToCosmic(false);
-  // }
   /* Prompts
   Headless CMS
   Write a 500 word article about why using a headless CMS may be a better choice than wordpress for building modern websites.
@@ -83,9 +57,25 @@ export default function IndexPage() {
   //   alert(error)
   // }
 
-  // async function handleAddToCosmic(e) {
-  //   setAddToCosmic(true);
-  // }
+  async function handleAddToCosmic(e) {
+    const bucket = api.bucket({
+      slug: getParameterByName('bucket_slug') || process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG,
+      read_key: getParameterByName('read_key') || process.env.NEXT_PUBLIC_COSMIC_BUCKET_READ_KEY,
+      write_key: getParameterByName('write_key') || process.env.NEXT_PUBLIC_COSMIC_BUCKET_WRITE_KEY,
+    })
+    console.log('sending')
+    const post = {
+      title: prompt,
+      content: str2br(answer),
+      type: getParameterByName('type') || 'posts'
+    }
+    try {
+      const added = await bucket.objects.insertOne(post)
+      console.log('Added!', added)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   async function resetForm(e) {
     setStatus('');
@@ -182,15 +172,15 @@ export default function IndexPage() {
         <h2 className="mb-4 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
           Answer
         </h2>
-        <div className="absolute top-0 right-0">
-            <Button onClick={handleCopyClick}>{ copied ? 'Copied' : 'Copy' } 
-            { copied ? <Icons.copied className="ml-2 h-5 w-5" /> : <Icons.copy className="ml-2 h-5 w-5" /> }</Button>
-        </div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: str2br(answer)}} className="mb-5"></div>
       <div>
-        {/* <Button onClick={handleAddToCosmic}>Add to this Object content area</Button>
-        &nbsp;&nbsp;&nbsp; */}
+        <Button onClick={handleCopyClick}>{ copied ? 'Answer Copied' : 'Copy Answer' } 
+          { copied ? <Icons.copied className="ml-2 h-5 w-5" /> : <Icons.copy className="ml-2 h-5 w-5" /> }
+        </Button>
+        &nbsp;&nbsp;&nbsp;
+        <Button onClick={handleAddToCosmic}>Add to this Object to Cosmic</Button>
+        &nbsp;&nbsp;&nbsp;
         <Button onClick={resetForm}>Ask another question</Button>
       </div>
     </div>
