@@ -3,36 +3,23 @@ import { Layout } from "@/components/layout"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Loader2, Download, Lightbulb, Copy, Check } from "lucide-react"
-
+import { getParameterByName, str2br } from "@/lib/utils"
 import { useState } from 'react';
+import { Configuration, OpenAIApi } from "openai";
+import Cosmic from "cosmicjs"
+const api = Cosmic()
 
 let OPENAI_API_KEY;
 let openai;
 if (process.browser) {
    // on browser
-  const { Configuration, OpenAIApi } = require("openai");
   OPENAI_API_KEY = getParameterByName('openai_api_key') || process.env.NEXT_PUBLIC_OPENAI_API_KEY
   const configuration = new Configuration({
     apiKey: OPENAI_API_KEY,
   });
   openai = new OpenAIApi(configuration);
 }
-const Cosmic = require("cosmicjs")
-const api = Cosmic()
 
-function getParameterByName(name, url = '') {
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-      results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-function str2br(str) {
-  return str.trim().replace(/(?:\r\n|\r|\n)/g, '<br>')
-}
 function H2(text) {
   return (
     <h2 className="mt-10 mb-2 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
@@ -40,8 +27,6 @@ function H2(text) {
     </h2>
   )
 }
-
-
 
 export default function IndexPage() {
   const [prompt, setPrompt] = useState('');
@@ -51,17 +36,6 @@ export default function IndexPage() {
   const [copied, setCopied] = useState(false);
   const [answer, setAnswer] = useState('');
   const [addingToCosmic, setAddingToCosmic] = useState(false);
-  
-  /* Prompts
-  Headless CMS
-  Write a 500 word article about why using a headless CMS may be a better choice than wordpress for building modern websites.
-
-  React CMS
-  Write a 5 paragraph article that ranks for seo for react cms that discusses why Cosmic CMS is the best content management system for your react applications. Use a brief code example from https://docs.cosmicjs.com
-  */
-  // if (error) {
-  //   alert(error)
-  // }
 
   async function handleAddToCosmic(e) {
     setAddingToCosmic(true)
@@ -136,10 +110,13 @@ export default function IndexPage() {
         presence_penalty: 0.0,
       });
       setAnswer(response.data.choices[0].text)
-    } catch(err) {
+    } catch(error) {
+      if (error.response) {
+        setErrorMessage(error.response.data.error.message);
+      } else {
+        setErrorMessage(error.message);
+      }
       setError(true)  
-      console.log('err', err)
-      setErrorMessage(err)
     }
   }
 
@@ -157,7 +134,7 @@ export default function IndexPage() {
 
   let content = <div>
     <H2>Cosmic AI Assistant</H2>
-    <p className="mb-2">What do you want Cosmic AI to generate? It can be short request or a long form article. Some examples:</p>
+    <p className="mb-2">What do you want Cosmic AI to generate? It can be a short request or a long form article. Some examples:</p>
     <p className="mb-2">Translate &apos;Hello&apos; into French, German, and Italian. <Button variant="subtle" onClick={() => handleAddText(`Translate 'Hello' into French, German, and Italian.`)}>Try it ▼</Button></p>
     <p className="mb-2">Write an article about the main causes for World War I. Reference historical quotes from world leaders. <Button variant="subtle" onClick={() => handleAddText(`Write an article about the main causes for World War I. Reference historical quotes from world leaders.`)}>Try it ▼</Button></p>
     <form className="mt-3" onSubmit={handleSubmit}>
@@ -185,35 +162,41 @@ export default function IndexPage() {
   </div>
   if (status === 'success') {
     content = <div>
-      <h2 className="mt-10 mb-4 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+      <H2>
         Prompt
-      </h2>
+      </H2>
       <div>{prompt}</div>
       <div className="relative mt-10">
-        <h2 className="mb-4 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+        <H2>
           Answer
-        </h2>
+        </H2>
       </div>
       <div dangerouslySetInnerHTML={{ __html: str2br(answer)}} className="mb-5"></div>
       <div>
-        <Button onClick={handleCopyClick}>
+        <Button className="mb-4" onClick={handleCopyClick}>
           { copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" /> }
           { copied ? 'Answer Copied' : 'Copy Answer' } 
         </Button>
+        { 
+          // If Cosmic content type set
+          getParameterByName('type') &&
+          <>
+            &nbsp;&nbsp;&nbsp;
+            <Button className="mb-4" onClick={handleAddToCosmic} disabled={addingToCosmic}>
+              {
+                !addingToCosmic &&
+                <Download className="mr-2 h-4 w-4" />
+              }
+              { 
+                addingToCosmic &&
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              }
+              { addingToCosmic ? `Adding to Cosmic...` : `Add to this Object to Cosmic` }
+            </Button>
+          </>
+        }
         &nbsp;&nbsp;&nbsp;
-        <Button onClick={handleAddToCosmic} disabled={addingToCosmic}>
-          {
-            !addingToCosmic &&
-            <Download className="mr-2 h-4 w-4" />
-          }
-          { 
-            addingToCosmic &&
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          }
-          { addingToCosmic ? `Adding to Cosmic...` : `Add to this Object to Cosmic` }
-        </Button>
-        &nbsp;&nbsp;&nbsp;
-        <Button onClick={resetForm}>
+        <Button className="mb-4" onClick={resetForm}>
           <Lightbulb className="mr-2 h-4 w-4" />
           Ask another question
         </Button>
@@ -225,6 +208,9 @@ export default function IndexPage() {
     content = <div>
       <div className="mb-3">
         An error occured.
+      </div>
+      <div className="mb-3">
+        { errorMessage }
       </div>
       <Button onClick={resetForm}>Try again</Button>
     </div>
