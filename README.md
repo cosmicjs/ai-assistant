@@ -1,6 +1,6 @@
 # Cosmic Writing Assistant Extension
 
-A ChatGPT-powered writing assistant. Ask Writing Assistant anything, save it to your Cosmic project. Simple.
+A ChatGPT-powered writing assistant. Ask Cosmic AI assistant anything, save it to your Cosmic Bucket. Simple.
 
 ## How to use
 1. Go to https://beta.cosmicjs.com sign up / login.
