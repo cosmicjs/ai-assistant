@@ -79,6 +79,7 @@ export default function IndexPage() {
   })
   const [cosmicObject, setCosmicObject] = useState({ id: false })
   const [showCosmicConfigForm, setShowCosmicConfigForm] = useState(false)
+  const [addedToCosmic, setAddedToCosmic] = useState(false)
 
   async function handleAddToCosmic(e) {
     if (
@@ -107,6 +108,7 @@ export default function IndexPage() {
       console.log("Added!", added)
       setCosmicObject(added.object)
       setAddingToCosmic(false)
+      setAddedToCosmic(true)
     } catch (error) {
       console.log(error)
       setAddingToCosmic(false)
@@ -120,6 +122,7 @@ export default function IndexPage() {
     setPrompt("")
     setError(false)
     setErrorMessage("")
+    setAddedToCosmic(false)
   }
 
   async function handleSubmitPromptForm(e) {
@@ -267,23 +270,37 @@ export default function IndexPage() {
             Ask another question
           </Button>
           &nbsp;&nbsp;&nbsp;
-          <Button
-            className="mb-4"
-            onClick={handleAddToCosmic}
-            disabled={addingToCosmic}
-          >
-            {!addingToCosmic && <Download className="mr-2 h-4 w-4" />}
-            {addingToCosmic && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {addingToCosmic
-              ? `Saving to Cosmic...`
-              : `Save this to Cosmic`}
-          </Button>
-          &nbsp;&nbsp;&nbsp;
+          {
+            !addedToCosmic &&
+            <>
+              <Button
+                className="mb-4"
+                onClick={handleAddToCosmic}
+                disabled={addingToCosmic}
+              >
+                {!addingToCosmic && <Download className="mr-2 h-4 w-4" />}
+                {addingToCosmic && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {addingToCosmic
+                  ? `Saving to Cosmic...`
+                  : `Save this to Cosmic`}
+              </Button>
+            </>
+          }
+          {
+            addedToCosmic &&
+            <Button
+              className="mb-4"
+              disabled
+            >
+              <Check className="mr-2 h-4 w-4" /> Saved to Cosmic
+            </Button>
+          }
+          &nbsp;&nbsp;&nbsp;&nbsp;
           {cosmicObject.id && (
             <Link
-              className="mr-2 h-4 w-4"
+              className="h-4 w-4"
               target="_blank"
               href={`https://beta.cosmicjs.com/${cosmicBucketConfig.bucket_slug}/objects/${
                 cosmicObject.id
