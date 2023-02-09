@@ -2,8 +2,7 @@ import Head from "next/head"
 import { Layout } from "@/components/layout"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-
+import { Loader2, Download, Lightbulb, Copy, Check } from "lucide-react"
 
 import { useState } from 'react';
 
@@ -34,6 +33,14 @@ function getParameterByName(name, url = '') {
 function str2br(str) {
   return str.trim().replace(/(?:\r\n|\r|\n)/g, '<br>')
 }
+function H2(text) {
+  return (
+    <h2 className="mt-10 mb-2 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+      {text.children}
+    </h2>
+  )
+}
+
 
 
 export default function IndexPage() {
@@ -88,6 +95,8 @@ export default function IndexPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!prompt.trim())
+      return;
     setStatus('submitting');
     try {
       await submitForm(prompt);
@@ -121,7 +130,7 @@ export default function IndexPage() {
         model: "text-davinci-003",
         prompt: q,
         temperature: 0.5,
-        max_tokens: 500,
+        max_tokens: 4000,
         top_p: 1.0,
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
@@ -135,7 +144,6 @@ export default function IndexPage() {
   }
 
   function handleCopyClick() {
-    console.log(answer)
     navigator.clipboard.writeText(answer);
     setCopied(true)
     setTimeout(() => {
@@ -143,10 +151,18 @@ export default function IndexPage() {
     }, 3000)
   }
 
+  function handleAddText(text) {
+    setPrompt(text);
+  }
+
   let content = <div>
-    <form onSubmit={handleSubmit}>
+    <H2>Cosmic AI Assistant</H2>
+    <p className="mb-2">What do you want Cosmic AI to generate? It can be a short or long form. Some examples:</p>
+    <p className="mb-2">Translate 'Hello' into French, German, and Italian. <Button variant="subtle" onClick={() => handleAddText(`Translate 'Hello' into French, German, and Italian.`)}>Try it ▼</Button></p>
+    <p className="mb-2">Write an article about the main causes for World War I. Reference historical quotes from world leaders. <Button variant="subtle" onClick={() => handleAddText(`Write an article about the main causes for World War I. Reference historical quotes from world leaders.`)}>Try it ▼</Button></p>
+    <form className="mt-3" onSubmit={handleSubmit}>
       <Textarea
-        placeholder="Ask Cosmic Writing Assistant anything. It can be something short like: Translate 'Hello' into French, German, and Italian. Or something long like: Write an article that will rank in search results for '10 best ramen restaurants in the San Francisco bay area'."
+        placeholder="Ask me anything."
         value={prompt}
         onChange={handleTextareaChange}
         onKeyDown={handleKeyDown}
@@ -159,11 +175,14 @@ export default function IndexPage() {
         prompt.length === 0 ||
         status === 'submitting'
       }>
-        { status === 'submitting' ? 'Submitting...' : 'Submit' }
+        { 
+          status === 'submitting' &&
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        }
+        { status === 'submitting' ? 'Generating...' : 'Generate' }
       </Button>
     </form>
   </div>
-
   if (status === 'success') {
     content = <div>
       <h2 className="mt-10 mb-4 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
@@ -177,15 +196,27 @@ export default function IndexPage() {
       </div>
       <div dangerouslySetInnerHTML={{ __html: str2br(answer)}} className="mb-5"></div>
       <div>
-        <Button onClick={handleCopyClick}>{ copied ? 'Answer Copied' : 'Copy Answer' } 
-          { copied ? <Icons.copied className="ml-2 h-5 w-5" /> : <Icons.copy className="ml-2 h-5 w-5" /> }
+        <Button onClick={handleCopyClick}>
+          { copied ? <Check className="mr-2 h-4 w-4" /> : <Copy className="mr-2 h-4 w-4" /> }
+          { copied ? 'Answer Copied' : 'Copy Answer' } 
         </Button>
         &nbsp;&nbsp;&nbsp;
         <Button onClick={handleAddToCosmic} disabled={addingToCosmic}>
+          {
+            !addingToCosmic &&
+            <Download className="mr-2 h-4 w-4" />
+          }
+          { 
+            addingToCosmic &&
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          }
           { addingToCosmic ? `Adding to Cosmic...` : `Add to this Object to Cosmic` }
         </Button>
         &nbsp;&nbsp;&nbsp;
-        <Button onClick={resetForm}>Ask another question</Button>
+        <Button onClick={resetForm}>
+          <Lightbulb className="mr-2 h-4 w-4" />
+          Ask another question
+        </Button>
       </div>
     </div>
   }
@@ -202,15 +233,15 @@ export default function IndexPage() {
   return (
     <Layout>
       <Head>
-        <title>Cosmic AI Writing Assistant</title>
+        <title>Cosmic AI Assistant</title>
         <meta
           name="description"
-          content="An AI Writing Assistant"
+          content="An AI Assistant"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 md:py-6">
         {content}
       </section>
     </Layout>
