@@ -12,7 +12,7 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Cosmic AI Assistant",
+  name: "Cosmic",
   description:
     "An AI writing assistant",
   mainNav: [],
