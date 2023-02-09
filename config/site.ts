@@ -18,7 +18,7 @@ export const siteConfig: SiteConfig = {
   mainNav: [],
   links: {
     twitter: "https://twitter.com/cosmicjs",
-    github: "https://github.com/cosmicjs",
+    github: "https://github.com/cosmicjs/ai-assistant",
     docs: "https://docs.cosmicjs.com",
   },
 }
