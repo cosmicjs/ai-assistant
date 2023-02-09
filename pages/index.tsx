@@ -215,8 +215,8 @@ export default function IndexPage() {
         What content do you want to generate? It can be a short
         request or a long form article. Some examples:
       </p>
-      { PROMPTS.map(text => {
-        return <p className="mb-2">
+      { PROMPTS.map((text, i) => {
+        return <p className="mb-2" key={`prompt-${i}`}>
         {text}{" "}
         <Button variant="subtle" onClick={() => handleAddText(text)}>
           Try it ▼
