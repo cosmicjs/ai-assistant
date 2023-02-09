@@ -158,7 +158,7 @@ export default function IndexPage() {
   let content = <div>
     <H2>Cosmic AI Assistant</H2>
     <p className="mb-2">What do you want Cosmic AI to generate? It can be short request or a long form article. Some examples:</p>
-    <p className="mb-2">Translate 'Hello' into French, German, and Italian. <Button variant="subtle" onClick={() => handleAddText(`Translate 'Hello' into French, German, and Italian.`)}>Try it ▼</Button></p>
+    <p className="mb-2">Translate &apos;Hello&apos; into French, German, and Italian. <Button variant="subtle" onClick={() => handleAddText(`Translate 'Hello' into French, German, and Italian.`)}>Try it ▼</Button></p>
     <p className="mb-2">Write an article about the main causes for World War I. Reference historical quotes from world leaders. <Button variant="subtle" onClick={() => handleAddText(`Write an article about the main causes for World War I. Reference historical quotes from world leaders.`)}>Try it ▼</Button></p>
     <form className="mt-3" onSubmit={handleSubmit}>
       <Textarea
