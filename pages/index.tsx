@@ -17,7 +17,7 @@ import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import TextareaAutosize from 'react-textarea-autosize';
 
 // Settings
 const PROMPTS = [
@@ -224,13 +224,14 @@ export default function IndexPage() {
       </p>
       })}
       <form className="mt-3" onSubmit={handleSubmitPromptForm}>
-        <Textarea
+        <TextareaAutosize
           placeholder="Ask or tell me to write anything."
           value={prompt}
           onChange={handleTextareaChange}
           onKeyDown={handleKeyDown}
           disabled={status === "submitting"}
-          className="h-20 w-full"
+          minRows={3}
+          className="flex h-20 w-full rounded-md border border-slate-300 bg-transparent p-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
           autoFocus
         />
         <br />
