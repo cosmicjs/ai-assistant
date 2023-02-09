@@ -356,7 +356,7 @@ export default function IndexPage() {
             <Button type="submit" className="mr-4">
               Save config
             </Button>
-            <Button onClick={handleCancelClick} variant="secondary">Cancel</Button>
+            <Button onClick={handleCancelClick} variant="subtle">Cancel</Button>
           </div>
         </form>
       </div>
