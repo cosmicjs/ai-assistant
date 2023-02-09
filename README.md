@@ -2,6 +2,8 @@
 
 A ChatGPT-powered writing assistant. Ask Cosmic AI assistant anything, save it to your Cosmic Bucket. Simple.
 
+[[View demo](https://cosmic-ai-assistant.vercel.app)]
+
 ## How to use
 1. Go to https://beta.cosmicjs.com sign up / login.
 2. Go to new or existing project. Go to Bucket Settings > Extensions.
