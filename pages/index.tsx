@@ -208,7 +208,7 @@ export default function IndexPage() {
     <div>
       <H2>Cosmic AI Assistant</H2>
       <p className="mb-2">
-        What content do you want Cosmic AI to generate? It can be a short
+        What content do you want to generate? It can be a short
         request or a long form article. Some examples:
       </p>
       <p className="mb-2">
@@ -225,7 +225,7 @@ export default function IndexPage() {
       </p>
       <form className="mt-3" onSubmit={handleSubmitPromptForm}>
         <Textarea
-          placeholder="Ask me anything."
+          placeholder="Ask or tell me to write anything."
           value={prompt}
           onChange={handleTextareaChange}
           onKeyDown={handleKeyDown}
