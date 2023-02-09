@@ -1,4 +1,4 @@
-# Cosmic Writing Assistant Extension
+# Cosmic AI Assistant
 
 A ChatGPT-powered writing assistant. Ask Cosmic AI assistant anything, save it to your Cosmic Bucket. Simple.
 
