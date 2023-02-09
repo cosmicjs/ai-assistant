@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 // Settings
 const PROMPTS = [
+  `Show me an image of a dog in an HTML img tag.`,
   `Translate 'Hello' into French, German, and Italian.`,
   `Write an article about the main causes for World War I. Reference historical quotes from world leaders.`,
 ]
@@ -211,18 +212,14 @@ export default function IndexPage() {
         What content do you want to generate? It can be a short
         request or a long form article. Some examples:
       </p>
-      <p className="mb-2">
-        {PROMPTS[0]}{" "}
-        <Button variant="subtle" onClick={() => handleAddText(PROMPTS[0])}>
+      { PROMPTS.map(text => {
+        return <p className="mb-2">
+        {text}{" "}
+        <Button variant="subtle" onClick={() => handleAddText(text)}>
           Try it ▼
         </Button>
       </p>
-      <p className="mb-2">
-        {PROMPTS[1]}{" "}
-        <Button variant="subtle" onClick={() => handleAddText(PROMPTS[1])}>
-          Try it ▼
-        </Button>
-      </p>
+      })}
       <form className="mt-3" onSubmit={handleSubmitPromptForm}>
         <Textarea
           placeholder="Ask or tell me to write anything."
