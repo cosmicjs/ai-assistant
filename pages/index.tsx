@@ -134,7 +134,7 @@ export default function IndexPage() {
 
   let content = <div>
     <H2>Cosmic AI Assistant</H2>
-    <p className="mb-2">What do you want Cosmic AI to generate? It can be a short request or a long form article. Some examples:</p>
+    <p className="mb-2">What content do you want Cosmic AI to generate? It can be a short request or a long form article. Some examples:</p>
     <p className="mb-2">Translate &apos;Hello&apos; into French, German, and Italian. <Button variant="subtle" onClick={() => handleAddText(`Translate 'Hello' into French, German, and Italian.`)}>Try it ▼</Button></p>
     <p className="mb-2">Write an article about the main causes for World War I. Reference historical quotes from world leaders. <Button variant="subtle" onClick={() => handleAddText(`Write an article about the main causes for World War I. Reference historical quotes from world leaders.`)}>Try it ▼</Button></p>
     <form className="mt-3" onSubmit={handleSubmit}>
@@ -224,10 +224,10 @@ export default function IndexPage() {
           name="description"
           content="An AI Assistant"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 md:py-6">
+      <section className="container grid items-center gap-6 py-6">
         {content}
       </section>
     </Layout>
