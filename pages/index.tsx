@@ -46,6 +46,8 @@ if (process.browser) {
     getParameterByName("read_key") || process.env.NEXT_PUBLIC_COSMIC_BUCKET_READ_KEY
   COSMIC_WRITE_KEY =
     getParameterByName("write_key") || process.env.NEXT_PUBLIC_COSMIC_BUCKET_WRITE_KEY
+  COSMIC_CONTENT_TYPE =
+    getParameterByName("type") || process.env.NEXT_PUBLIC_COSMIC_CONTENT_TYPE
   const configuration = new Configuration({
     apiKey: OPENAI_API_KEY,
   })
