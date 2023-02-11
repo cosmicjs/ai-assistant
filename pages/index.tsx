@@ -21,7 +21,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 // Settings
 const PROMPTS = [
-  `Show me an image of a dog in an HTML img tag.`,
   `Translate 'Hello' into French, German, and Italian.`,
   `Write an article about the main causes for World War I. Reference historical quotes from world leaders.`,
 ]
@@ -328,6 +327,14 @@ export default function IndexPage() {
             <Link target="_blank" href="https://beta.cosmicjs.com/login">
               Bucket &gt; Settings &gt; API Access{" "}
               <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
+            </Link>
+          </i>
+            &nbsp;
+            (You will need access to the&nbsp;
+          <i>
+            <Link target="_blank" href="https://beta.cosmicjs.com">
+              v2 dashboard{" "}
+              <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />)
             </Link>
           </i>
           .
