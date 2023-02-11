@@ -11,13 +11,13 @@ import {
   Loader2,
 } from "lucide-react"
 import { Configuration, OpenAIApi } from "openai"
+import TextareaAutosize from "react-textarea-autosize"
 
 import { getParameterByName, str2br } from "@/lib/utils"
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import TextareaAutosize from 'react-textarea-autosize';
 
 // Settings
 const PROMPTS = [
@@ -43,9 +43,11 @@ if (process.browser) {
     getParameterByName("bucket_slug") ||
     process.env.NEXT_PUBLIC_COSMIC_BUCKET_SLUG
   COSMIC_READ_KEY =
-    getParameterByName("read_key") || process.env.NEXT_PUBLIC_COSMIC_BUCKET_READ_KEY
+    getParameterByName("read_key") ||
+    process.env.NEXT_PUBLIC_COSMIC_BUCKET_READ_KEY
   COSMIC_WRITE_KEY =
-    getParameterByName("write_key") || process.env.NEXT_PUBLIC_COSMIC_BUCKET_WRITE_KEY
+    getParameterByName("write_key") ||
+    process.env.NEXT_PUBLIC_COSMIC_BUCKET_WRITE_KEY
   COSMIC_CONTENT_TYPE =
     getParameterByName("type") || process.env.NEXT_PUBLIC_COSMIC_CONTENT_TYPE
   const configuration = new Configuration({
@@ -211,16 +213,18 @@ export default function IndexPage() {
     <div>
       <H2>Cosmic AI Assistant</H2>
       <p className="mb-2">
-        What content do you want to generate? It can be a short
-        request or a long form article. Some examples:
+        What content do you want to generate? It can be a short request or a
+        long form article. Some examples:
       </p>
-      { PROMPTS.map((text, i) => {
-        return <p className="mb-2" key={`prompt-${i}`}>
-        {text}{" "}
-        <Button variant="subtle" onClick={() => handleAddText(text)}>
-          Try it ▼
-        </Button>
-      </p>
+      {PROMPTS.map((text, i) => {
+        return (
+          <p className="mb-2" key={`prompt-${i}`}>
+            {text}{" "}
+            <Button variant="subtle" onClick={() => handleAddText(text)}>
+              Try it ▼
+            </Button>
+          </p>
+        )
       })}
       <form className="mt-3" onSubmit={handleSubmitPromptForm}>
         <TextareaAutosize
@@ -270,43 +274,36 @@ export default function IndexPage() {
             Ask another question
           </Button>
           &nbsp;&nbsp;&nbsp;
-          {
-            !addedToCosmic &&
+          {!addedToCosmic && (
             <>
               <Button
                 className="mb-4"
                 onClick={handleAddToCosmic}
                 disabled={addingToCosmic}
               >
-                {!addingToCosmic && <Download className="mr-2 h-4 w-4" />}
-                {addingToCosmic && (
+                {!addingToCosmic ? (
+                  <Download className="mr-2 h-4 w-4" />
+                ) : (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                {addingToCosmic
-                  ? `Saving to Cosmic...`
-                  : `Save this to Cosmic`}
+                {addingToCosmic ? `Saving to Cosmic...` : `Save this to Cosmic`}
               </Button>
             </>
-          }
-          {
-            addedToCosmic &&
-            <Button
-              className="mb-4"
-              disabled
-            >
+          )}
+          {addedToCosmic && (
+            <Button className="mb-4" disabled>
               <Check className="mr-2 h-4 w-4" /> Saved to Cosmic
             </Button>
-          }
+          )}
           &nbsp;&nbsp;&nbsp;&nbsp;
           {cosmicObject.id && (
             <Link
               className="h-4 w-4"
               target="_blank"
-              href={`https://beta.cosmicjs.com/${cosmicBucketConfig.bucket_slug}/objects/${
-                cosmicObject.id
-              }`}
+              href={`https://beta.cosmicjs.com/${cosmicBucketConfig.bucket_slug}/objects/${cosmicObject.id}`}
             >
-              Go to Object&nbsp;&nbsp;<ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
+              Go to Object&nbsp;&nbsp;
+              <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
             </Link>
           )}
         </div>
@@ -329,18 +326,18 @@ export default function IndexPage() {
               <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
             </Link>
           </i>
-            &nbsp;
-            (You will need access to the&nbsp;
+          &nbsp; (You will need access to the&nbsp;
           <i>
             <Link target="_blank" href="https://beta.cosmicjs.com">
               v2 dashboard{" "}
-              <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />)
+              <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
+              )
             </Link>
           </i>
           .
         </div>
         <form onSubmit={handleSaveConfig}>
-          <div className="mb-3">
+          <div className="mb-5">
             <Label className="text-base mb-2 block">Bucket slug</Label>
             <Input
               className="text-base"
@@ -351,7 +348,7 @@ export default function IndexPage() {
               defaultValue={cosmicBucketConfig.bucket_slug}
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-5">
             <Label className="text-base mb-2 block">Bucket read key</Label>
             <Input
               className="text-base"
@@ -361,7 +358,7 @@ export default function IndexPage() {
               defaultValue={cosmicBucketConfig.read_key}
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-5">
             <Label className="text-base mb-2 block">Bucket write key</Label>
             <Input
               className="text-base"
@@ -371,7 +368,7 @@ export default function IndexPage() {
               defaultValue={cosmicBucketConfig.write_key}
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-5">
             <Label className="text-base mb-2 block">Content type slug</Label>
             <Input
               className="text-base"
@@ -385,7 +382,9 @@ export default function IndexPage() {
             <Button type="submit" className="mr-4">
               Save config
             </Button>
-            <Button onClick={handleCancelClick} variant="subtle">Cancel</Button>
+            <Button onClick={handleCancelClick} variant="subtle">
+              Cancel
+            </Button>
           </div>
         </form>
       </div>
