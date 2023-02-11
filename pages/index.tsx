@@ -230,7 +230,7 @@ export default function IndexPage() {
           onKeyDown={handleKeyDown}
           disabled={status === "submitting"}
           minRows={3}
-          className="flex h-20 w-full rounded-md border border-slate-300 bg-transparent p-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+          className="text-base flex h-20 w-full rounded-md border border-slate-300 bg-transparent p-3 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
           autoFocus
         />
         <br />
@@ -341,8 +341,9 @@ export default function IndexPage() {
         </div>
         <form onSubmit={handleSaveConfig}>
           <div className="mb-3">
-            <Label className="mb-2 block">Bucket slug</Label>
+            <Label className="text-base mb-2 block">Bucket slug</Label>
             <Input
+              className="text-base"
               name="bucket_slug"
               autoFocus
               type="text"
@@ -351,8 +352,9 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-3">
-            <Label className="mb-2 block">Bucket read key</Label>
+            <Label className="text-base mb-2 block">Bucket read key</Label>
             <Input
+              className="text-base"
               name="read_key"
               type="text"
               placeholder="your-bucket-read-key"
@@ -360,8 +362,9 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-3">
-            <Label className="mb-2 block">Bucket write key</Label>
+            <Label className="text-base mb-2 block">Bucket write key</Label>
             <Input
+              className="text-base"
               name="write_key"
               type="text"
               placeholder="your-bucket-write-key"
@@ -369,8 +372,9 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-3">
-            <Label className="mb-2 block">Content type slug</Label>
+            <Label className="text-base mb-2 block">Content type slug</Label>
             <Input
+              className="text-base"
               name="type"
               type="text"
               placeholder="your-content-type-slug"
