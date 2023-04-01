@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import Cosmic from "cosmicjs"
+import { createBucketClient } from "@cosmicjs/sdk"
 import {
   Check,
   Copy,
@@ -24,7 +24,6 @@ const PROMPTS = [
   `Translate 'Hello' into French, German, and Italian.`,
   `Write an article about the main causes for World War I. Reference historical quotes from world leaders.`,
 ]
-const api = Cosmic()
 
 let OPENAI_API_KEY
 let openai
@@ -73,9 +72,9 @@ export default function IndexPage() {
   const [answer, setAnswer] = useState("")
   const [addingToCosmic, setAddingToCosmic] = useState(false)
   const [cosmicBucketConfig, setCosmicBucketConfig] = useState({
-    bucket_slug: COSMIC_BUCKET_SLUG,
-    read_key: COSMIC_READ_KEY,
-    write_key: COSMIC_WRITE_KEY,
+    bucketSlug: COSMIC_BUCKET_SLUG,
+    readKey: COSMIC_READ_KEY,
+    writeKey: COSMIC_WRITE_KEY,
     type: COSMIC_CONTENT_TYPE,
   })
   const [cosmicObject, setCosmicObject] = useState({ id: false })
@@ -84,18 +83,18 @@ export default function IndexPage() {
 
   async function handleAddToCosmic(e) {
     if (
-      !cosmicBucketConfig.bucket_slug ||
-      !cosmicBucketConfig.read_key ||
-      !cosmicBucketConfig.write_key ||
+      !cosmicBucketConfig.bucketSlug ||
+      !cosmicBucketConfig.readKey ||
+      !cosmicBucketConfig.writeKey ||
       !cosmicBucketConfig.type
     ) {
       setShowCosmicConfigForm(true)
       return
     }
-    const bucket = api.bucket({
-      slug: cosmicBucketConfig.bucket_slug,
-      read_key: cosmicBucketConfig.read_key,
-      write_key: cosmicBucketConfig.write_key,
+    const cosmic = createBucketClient({
+      bucketSlug: cosmicBucketConfig.bucketSlug,
+      readKey: cosmicBucketConfig.readKey,
+      writeKey: cosmicBucketConfig.writeKey,
     })
     setAddingToCosmic(true)
     console.log("sending")
@@ -105,7 +104,7 @@ export default function IndexPage() {
       type: cosmicBucketConfig.type,
     }
     try {
-      const added = await bucket.objects.insertOne(post)
+      const added = await cosmic.objects.insertOne(post)
       console.log("Added!", added)
       setCosmicObject(added.object)
       setAddingToCosmic(false)
@@ -158,16 +157,25 @@ export default function IndexPage() {
 
   async function submitPromptForm(q) {
     try {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: q,
+      // const response = await openai.createCompletion({
+      //   model: "text-davinci-003",
+      //   prompt: q,
+      //   temperature: 0.5,
+      //   max_tokens: 4000,
+      //   top_p: 1.0,
+      //   frequency_penalty: 0.0,
+      //   presence_penalty: 0.0,
+      // })
+      const response = await openai.createChatCompletion({
+        model: "gpt-4",
+        messages: [{ role: 'user', content: q }],
         temperature: 0.5,
         max_tokens: 4000,
         top_p: 1.0,
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
       })
-      setAnswer(response.data.choices[0].text)
+      setAnswer(response.data.choices[0].message.content)
     } catch (error) {
       if (error.response) {
         setErrorMessage(error.response.data.error.message)
@@ -192,14 +200,14 @@ export default function IndexPage() {
 
   function handleSaveConfig(e) {
     e.preventDefault()
-    const bucket_slug = e.target.bucket_slug.value
-    const read_key = e.target.read_key.value
-    const write_key = e.target.write_key.value
+    const bucketSlug = e.target.bucket_slug.value
+    const readKey = e.target.read_key.value
+    const writeKey = e.target.write_key.value
     const type = e.target.type.value
     setCosmicBucketConfig({
-      bucket_slug,
-      read_key,
-      write_key,
+      bucketSlug,
+      readKey,
+      writeKey,
       type,
     })
     setShowCosmicConfigForm(false)
@@ -300,7 +308,7 @@ export default function IndexPage() {
             <Link
               className="h-4 w-4"
               target="_blank"
-              href={`https://beta.cosmicjs.com/${cosmicBucketConfig.bucket_slug}/objects/${cosmicObject.id}`}
+              href={`https://beta.cosmicjs.com/${cosmicBucketConfig.bucketSlug}/objects/${cosmicObject.id}`}
             >
               Go to Object&nbsp;&nbsp;
               <ExternalLinkIcon className="relative top-[-5px] inline-block h-4 w-4" />
@@ -345,7 +353,7 @@ export default function IndexPage() {
               autoFocus
               type="text"
               placeholder="your-bucket-slug"
-              defaultValue={cosmicBucketConfig.bucket_slug}
+              defaultValue={cosmicBucketConfig.bucketSlug}
             />
           </div>
           <div className="mb-5">
@@ -355,7 +363,7 @@ export default function IndexPage() {
               name="read_key"
               type="text"
               placeholder="your-bucket-read-key"
-              defaultValue={cosmicBucketConfig.read_key}
+              defaultValue={cosmicBucketConfig.readKey}
             />
           </div>
           <div className="mb-5">
@@ -365,7 +373,7 @@ export default function IndexPage() {
               name="write_key"
               type="text"
               placeholder="your-bucket-write-key"
-              defaultValue={cosmicBucketConfig.write_key}
+              defaultValue={cosmicBucketConfig.writeKey}
             />
           </div>
           <div className="mb-5">
