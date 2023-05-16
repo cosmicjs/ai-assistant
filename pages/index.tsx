@@ -31,7 +31,7 @@ let COSMIC_BUCKET_SLUG
 let COSMIC_READ_KEY
 let COSMIC_WRITE_KEY
 let COSMIC_CONTENT_TYPE
-let bucket
+
 if (process.browser) {
   // on browser
   // Get default keys
@@ -57,7 +57,7 @@ if (process.browser) {
 
 function H2(text) {
   return (
-    <h2 className="mt-10 mb-2 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
+    <h2 className="mb-2 mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-neutral-700">
       {text.children}
     </h2>
   )
@@ -168,7 +168,7 @@ export default function IndexPage() {
       // })
       const response = await openai.createChatCompletion({
         model: "gpt-4",
-        messages: [{ role: 'user', content: q }],
+        messages: [{ role: "user", content: q }],
         temperature: 0.5,
         max_tokens: 4000,
         top_p: 1.0,
@@ -242,7 +242,7 @@ export default function IndexPage() {
           onKeyDown={handleKeyDown}
           disabled={status === "submitting"}
           minRows={3}
-          className="text-base flex h-20 w-full rounded-md border border-slate-300 bg-transparent p-3 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+          className="flex h-20 w-full rounded-md border border-neutral-300 bg-transparent p-3 text-base placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-50 dark:focus:ring-neutral-400 dark:focus:ring-offset-neutral-900"
           autoFocus
         />
         <br />
@@ -346,7 +346,7 @@ export default function IndexPage() {
         </div>
         <form onSubmit={handleSaveConfig}>
           <div className="mb-5">
-            <Label className="text-base mb-2 block">Bucket slug</Label>
+            <Label className="mb-2 block text-base">Bucket slug</Label>
             <Input
               className="text-base"
               name="bucket_slug"
@@ -357,7 +357,7 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-5">
-            <Label className="text-base mb-2 block">Bucket read key</Label>
+            <Label className="mb-2 block text-base">Bucket read key</Label>
             <Input
               className="text-base"
               name="read_key"
@@ -367,7 +367,7 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-5">
-            <Label className="text-base mb-2 block">Bucket write key</Label>
+            <Label className="mb-2 block text-base">Bucket write key</Label>
             <Input
               className="text-base"
               name="write_key"
@@ -377,7 +377,7 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-5">
-            <Label className="text-base mb-2 block">Content type slug</Label>
+            <Label className="mb-2 block text-base">Content type slug</Label>
             <Input
               className="text-base"
               name="type"
