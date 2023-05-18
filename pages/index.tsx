@@ -268,7 +268,7 @@ export default function IndexPage() {
           className="mb-5"
         ></div>
         <div>
-          <Button className="mb-4" onClick={handleCopyClick}>
+          <Button className="mb-4" variant="subtle" onClick={handleCopyClick}>
             {copied ? (
               <Check className="mr-2 h-4 w-4" />
             ) : (
@@ -277,7 +277,7 @@ export default function IndexPage() {
             {copied ? "Answer Copied" : "Copy answer"}
           </Button>
           &nbsp;&nbsp;&nbsp;
-          <Button className="mb-4" onClick={resetForm}>
+          <Button className="mb-4" variant="subtle" onClick={resetForm}>
             <Lightbulb className="mr-2 h-4 w-4" />
             Ask another question
           </Button>
