@@ -100,7 +100,9 @@ export default function IndexPage() {
     console.log("sending")
     const post = {
       title: prompt,
-      content: str2br(answer),
+      metadata: {
+        content: str2br(answer)
+      },
       type: cosmicBucketConfig.type,
     }
     try {
@@ -377,7 +379,8 @@ export default function IndexPage() {
             />
           </div>
           <div className="mb-5">
-            <Label className="mb-2 block text-base">Content type slug</Label>
+            <Label className="mb-2 block text-base">Object type slug</Label>
+            <p>* Requires a rich text Metafield with key <code>content</code></p>
             <Input
               className="text-base"
               name="type"
